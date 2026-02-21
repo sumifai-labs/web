@@ -2050,6 +2050,51 @@
                 pdf.setFillColor(10, 22, 40);
                 pdf.rect(0, 0, pageW, pageH, 'F');
                 pdf.addImage(partData, 'JPEG', 0, 0, pageW, Math.min(scaledH, pageH));
+
+                // Add contact info in top-right corner on each slide's first page
+                if (p === 0) {
+                    const rx = pageW - 5;
+                    const ty = 3.5;
+                    const lh = 3.8;
+                    const bw = 50;
+                    const bh = 15;
+                    const bx = rx - bw;
+                    const by = ty - 1.5;
+
+                    // Glass card background
+                    pdf.setGState(new pdf.GState({ opacity: 0.85 }));
+                    pdf.setFillColor(18, 35, 60);
+                    pdf.roundedRect(bx, by, bw, bh, 1.5, 1.5, 'F');
+                    pdf.setGState(new pdf.GState({ opacity: 1 }));
+
+                    // Top accent line
+                    pdf.setFillColor(0, 160, 227);
+                    pdf.rect(bx + 4, by, bw - 8, 0.4, 'F');
+
+                    // Name
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(7);
+                    pdf.setTextColor(240, 244, 250);
+                    pdf.text('Milan Kajkut', bx + bw / 2, ty + 2.5, { align: 'center' });
+                    pdf.link(bx, ty, bw, 4, { url: 'https://www.linkedin.com/in/milan-kajkut' });
+
+                    // Divider
+                    pdf.setDrawColor(255, 255, 255, 0.1);
+                    pdf.setLineWidth(0.15);
+                    pdf.line(bx + 4, ty + 4, bx + bw - 4, ty + 4);
+
+                    // Email
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(5.5);
+                    pdf.setTextColor(100, 180, 230);
+                    pdf.text('team@sumifai.com', bx + bw / 2, ty + 2.5 + lh + 1.5, { align: 'center' });
+                    pdf.link(bx, ty + lh + 1, bw, 3.5, { url: 'mailto:team@sumifai.com' });
+
+                    // Website
+                    pdf.setTextColor(100, 180, 230);
+                    pdf.text('sumifai.com/labs', bx + bw / 2, ty + 2.5 + lh * 2 + 1.5, { align: 'center' });
+                    pdf.link(bx, ty + lh * 2 + 1, bw, 3.5, { url: 'https://sumifai.com/labs' });
+                }
             }
         }
 

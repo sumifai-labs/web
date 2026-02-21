@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank - KI-Automatisierungslösungen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --erste-dark: #0a1628;
+            --erste-blue: #1a3a5c;
+            --erste-accent: #00a0e3;
+            --erste-light-blue: #e8f4fd;
+            --erste-gold: #d4a843;
+            --erste-green: #2ecc71;
+            --erste-red: #e74c3c;
+            --erste-orange: #f39c12;
+            --glass-bg: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--erste-dark);
+            color: #e0e8f0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ── Slide Container ── */
+        .slide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            pointer-events: none;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,160,227,0.3) transparent;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide::-webkit-scrollbar { width: 6px; }
+        .slide::-webkit-scrollbar-track { background: transparent; }
+        .slide::-webkit-scrollbar-thumb { background: rgba(0,160,227,0.3); border-radius: 3px; }
+
+        /* ── Background Patterns ── */
+        .slide::before {
+            content: '';
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,160,227,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(212,168,67,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(0,160,227,0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-inner {
+            position: relative;
+            z-index: 1;
+            padding: 30px 50px 80px;
+            min-height: 100vh;
+        }
+
+        /* ── Top Bar ── */
+        .top-bar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(10,22,40,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--erste-accent), #0077b6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            color: var(--erste-accent);
+        }
+
+        .slide-indicator {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--erste-accent);
+            box-shadow: 0 0 12px rgba(0,160,227,0.5);
+            width: 28px;
+            border-radius: 5px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pdf-btn {
+            height: 36px;
+            padding: 0 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--erste-gold);
+            background: rgba(212,168,67,0.12);
+            color: var(--erste-gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pdf-btn:hover {
+            background: rgba(212,168,67,0.25);
+            border-color: #fff;
+            color: #fff;
+            box-shadow: 0 0 14px rgba(212,168,67,0.3);
+            transform: scale(1.04);
+        }
+
+        .pdf-btn:active {
+            transform: scale(0.96);
+        }
+
+        .pdf-btn.downloading {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .pdf-btn .pdf-icon {
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .pdf-progress {
+            position: fixed;
+            top: 56px; left: 0; right: 0;
+            height: 3px;
+            background: transparent;
+            z-index: 200;
+            overflow: hidden;
+        }
+
+        .pdf-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--erste-gold), var(--erste-accent));
+            border-radius: 0 2px 2px 0;
+            transition: width 0.4s ease;
+        }
+
+        .nav-btn {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            border: 1.5px solid var(--erste-accent);
+            background: rgba(0,160,227,0.1);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            font-size: 16px;
+            box-shadow: 0 0 8px rgba(0,160,227,0.15);
+            animation: pulseNav 2.5s ease-in-out infinite;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0,160,227,0.3);
+            border-color: #fff;
+            box-shadow: 0 0 16px rgba(0,160,227,0.4);
+            transform: scale(1.1);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+            background: rgba(0,160,227,0.45);
+        }
+
+        @keyframes pulseNav {
+            0%, 100% { box-shadow: 0 0 8px rgba(0,160,227,0.15); }
+            50% { box-shadow: 0 0 18px rgba(0,160,227,0.35); }
+        }
+
+        /* ── Slide Header ── */
+        .slide-header {
+            margin-top: 46px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 22px;
+        }
+
+        .slide-number {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .slide-number::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 19px;
+            background: inherit;
+            opacity: 0.2;
+            z-index: -1;
+            filter: blur(8px);
+        }
+
+        .s1 .slide-number { background: linear-gradient(135deg, #00a0e3, #0077b6); }
+        .s2 .slide-number { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .s3 .slide-number { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+        .slide-title-area h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .slide-title-area .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+
+        .effect-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .s1 .effect-badge { background: rgba(0,160,227,0.15); color: var(--erste-accent); }
+        .s2 .effect-badge { background: rgba(243,156,18,0.15); color: var(--erste-orange); }
+        .s3 .effect-badge { background: rgba(46,204,113,0.15); color: var(--erste-green); }
+
+        /* ── Grid Layout ── */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(0,160,227,0.25);
+        }
+
+        .card-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 18px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .card-label .icon {
+            width: 22px; height: 22px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* ── Comparison (Heute vs. Automatisiert) ── */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0;
+            align-items: stretch;
+        }
+
+        .compare-col {
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .compare-col.today {
+            background: rgba(231,76,60,0.06);
+            border: 1px solid rgba(231,76,60,0.15);
+        }
+
+        .compare-col.auto {
+            background: rgba(46,204,113,0.06);
+            border: 1px solid rgba(46,204,113,0.15);
+        }
+
+        .compare-col h4 {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .compare-col.today h4 { color: var(--erste-red); }
+        .compare-col.auto h4 { color: var(--erste-green); }
+
+        .compare-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .compare-col li {
+            font-size: 13px;
+            line-height: 1.5;
+            padding-left: 18px;
+            position: relative;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .compare-col.today li::before {
+            content: '✕';
+            position: absolute;
+            left: 0;
+            color: var(--erste-red);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .compare-col.auto li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--erste-green);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .compare-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            font-size: 22px;
+            color: var(--erste-accent);
+        }
+
+        /* ── Data Tags ── */
+        .data-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .data-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: rgba(0,160,227,0.08);
+            border: 1px solid rgba(0,160,227,0.15);
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .data-tag .tag-icon {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            background: rgba(0,160,227,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* ── Human in the Loop ── */
+        .hitl-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hitl-step {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid transparent;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .hitl-step.ai {
+            border-left-color: var(--erste-accent);
+        }
+
+        .hitl-step.human {
+            border-left-color: var(--erste-gold);
+            background: rgba(212,168,67,0.06);
+        }
+
+        .hitl-badge {
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .hitl-step.ai .hitl-badge {
+            background: rgba(0,160,227,0.15);
+            color: var(--erste-accent);
+        }
+
+        .hitl-step.human .hitl-badge {
+            background: rgba(212,168,67,0.18);
+            color: var(--erste-gold);
+        }
+
+        /* ── Value Cards ── */
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .value-card {
+            padding: 18px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+        }
+
+        .value-card.bank {
+            border-top: 3px solid var(--erste-accent);
+        }
+
+        .value-card.kunde {
+            border-top: 3px solid var(--erste-gold);
+        }
+
+        .value-card h5 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .value-card.bank h5 { color: var(--erste-accent); }
+        .value-card.kunde h5 { color: var(--erste-gold); }
+
+        .value-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .value-item:last-child { margin-bottom: 0; }
+
+        .value-icon {
+            width: 24px; height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .value-card.bank .value-icon {
+            background: rgba(0,160,227,0.12);
+        }
+
+        .value-card.kunde .value-icon {
+            background: rgba(212,168,67,0.12);
+        }
+
+        /* ── Flow Diagram ── */
+        .flow-pipeline {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 8px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 10px;
+            min-width: 80px;
+        }
+
+        .flow-step-icon {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .flow-step-icon.ai-step { background: rgba(0,160,227,0.12); border-color: rgba(0,160,227,0.25); }
+        .flow-step-icon.human-step { background: rgba(212,168,67,0.12); border-color: rgba(212,168,67,0.25); }
+        .flow-step-icon.data-step { background: rgba(46,204,113,0.12); border-color: rgba(46,204,113,0.25); }
+
+        .flow-step-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            color: rgba(255,255,255,0.55);
+            max-width: 80px;
+        }
+
+        .flow-arrow {
+            font-size: 16px;
+            color: rgba(255,255,255,0.2);
+            margin: 0 2px;
+        }
+
+        /* ── KPI Row ── */
+        .kpi-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi {
+            flex: 1;
+            text-align: center;
+            padding: 16px 12px;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .s1 .kpi-value { color: var(--erste-accent); }
+        .s2 .kpi-value { color: var(--erste-orange); }
+        .s3 .kpi-value { color: var(--erste-green); }
+
+        .kpi-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.45);
+            font-weight: 500;
+        }
+
+        /* ── API Badge ── */
+        .api-strip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(0,160,227,0.08), rgba(0,119,182,0.08));
+            border: 1px solid rgba(0,160,227,0.15);
+            margin-top: 8px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .api-strip code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            background: rgba(0,160,227,0.12);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--erste-accent);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ── Keyboard hint ── */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 44px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.25);
+            z-index: 100;
+        }
+
+        .key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 22px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05);
+            font-size: 10px;
+        }
+
+        /* ── Author Footer ── */
+        .author-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 36px;
+            background: rgba(10,22,40,0.92);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding: 0 30px;
+            z-index: 100;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .author-bar a {
+            color: var(--erste-accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .author-bar a:hover {
+            color: #fff;
+        }
+
+        .author-bar .separator {
+            width: 1px;
+            height: 14px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .author-bar .author-name {
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active .card { animation: fadeInUp 0.5s ease forwards; }
+        .slide.active .card:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .card:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .card:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* ── Responsive: Tablet ── */
+        @media (max-width: 1100px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .slide-inner { padding: 30px 24px 40px; }
+            .value-grid { grid-template-columns: 1fr; }
+            .comparison { grid-template-columns: 1fr; }
+            .compare-arrow { transform: rotate(90deg); width: auto; padding: 8px 0; }
+        }
+
+        /* ── Responsive: Mobile ── */
+        @media (max-width: 600px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .top-bar {
+                height: 48px;
+                padding: 0 10px;
+                gap: 4px;
+            }
+
+            .logo-area {
+                gap: 8px;
+                flex-shrink: 1;
+                min-width: 0;
+            }
+
+            .logo-icon {
+                width: 26px; height: 26px;
+                font-size: 10px;
+                border-radius: 6px;
+                flex-shrink: 0;
+            }
+
+            .logo-text {
+                font-size: 10px;
+                line-height: 1.25;
+                white-space: normal;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                max-width: 110px;
+            }
+
+            .slide-indicator {
+                gap: 5px;
+                flex-shrink: 0;
+            }
+
+            .dot {
+                width: 8px; height: 8px;
+            }
+
+            .dot.active {
+                width: 20px;
+            }
+
+            .nav-controls {
+                gap: 4px;
+                flex-shrink: 0;
+            }
+
+            .nav-btn {
+                width: 30px; height: 30px;
+                font-size: 12px;
+                border-radius: 6px;
+            }
+
+            .pdf-btn {
+                height: 30px;
+                padding: 0 10px;
+                font-size: 10px;
+                gap: 4px;
+                border-radius: 6px;
+            }
+
+            .pdf-btn .pdf-icon {
+                font-size: 13px;
+            }
+
+            .slide-inner {
+                padding: 16px 14px 32px;
+            }
+
+            .slide-header {
+                margin-top: 40px;
+                margin-bottom: 18px;
+                gap: 14px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .slide-number {
+                width: 42px; height: 42px;
+                font-size: 18px;
+                border-radius: 12px;
+            }
+
+            .slide-title-area h1 {
+                font-size: 19px;
+                line-height: 1.25;
+            }
+
+            .slide-title-area .subtitle {
+                font-size: 12px;
+            }
+
+            .effect-badge {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+
+            /* KPI row: 2x2 grid on mobile */
+            .kpi-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+
+            .kpi {
+                padding: 12px 8px;
+                border-radius: 10px;
+            }
+
+            .kpi-value {
+                font-size: 20px;
+            }
+
+            .kpi-label {
+                font-size: 9px;
+            }
+
+            /* Pipeline flow: wrap & smaller */
+            .flow-pipeline {
+                flex-wrap: wrap;
+                gap: 0;
+                justify-content: center;
+                padding: 4px 0;
+            }
+
+            .flow-step {
+                padding: 8px 6px;
+                min-width: 62px;
+            }
+
+            .flow-step-icon {
+                width: 34px; height: 34px;
+                border-radius: 10px;
+                font-size: 15px;
+            }
+
+            .flow-step-label {
+                font-size: 8px;
+                max-width: 64px;
+            }
+
+            .flow-arrow {
+                font-size: 12px;
+                margin: 0 1px;
+            }
+
+            .api-strip {
+                flex-wrap: wrap;
+                padding: 10px 12px;
+                gap: 6px;
+                font-size: 11px;
+            }
+
+            .api-strip code {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+
+            /* Cards */
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .card {
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            .card-label {
+                font-size: 10px;
+                letter-spacing: 1px;
+                margin-bottom: 14px;
+            }
+
+            /* Comparison */
+            .comparison {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .compare-col {
+                padding: 12px;
+                border-radius: 10px;
+            }
+
+            .compare-col h4 {
+                font-size: 11px;
+                margin-bottom: 8px;
+            }
+
+            .compare-col li {
+                font-size: 12px;
+                line-height: 1.45;
+                padding-left: 16px;
+            }
+
+            .compare-arrow {
+                transform: rotate(90deg);
+                width: auto;
+                padding: 6px 0;
+                font-size: 18px;
+            }
+
+            /* Data tags: stack vertically */
+            .data-tags {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .data-tag {
+                padding: 8px 12px;
+                font-size: 12px;
+                border-radius: 8px;
+            }
+
+            .data-tag .tag-icon {
+                width: 24px; height: 24px;
+                font-size: 12px;
+                border-radius: 6px;
+            }
+
+            /* HITL */
+            .hitl-step {
+                padding: 8px 10px;
+                gap: 10px;
+                font-size: 12px;
+                border-radius: 8px;
+            }
+
+            .hitl-badge {
+                font-size: 9px;
+                padding: 2px 8px;
+                min-width: 42px;
+            }
+
+            /* Value Grid */
+            .value-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .value-card {
+                padding: 14px;
+                border-radius: 10px;
+            }
+
+            .value-card h5 {
+                font-size: 10px;
+                margin-bottom: 10px;
+            }
+
+            .value-item {
+                font-size: 12px;
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+
+            .value-icon {
+                width: 22px; height: 22px;
+                font-size: 11px;
+                border-radius: 5px;
+            }
+
+            /* Keyboard hint on mobile */
+            .keyboard-hint {
+                font-size: 9px;
+                bottom: 36px;
+                gap: 5px;
+            }
+
+            .keyboard-hint .key {
+                width: 20px;
+                height: 18px;
+                font-size: 8px;
+            }
+
+            .author-bar {
+                height: 32px;
+                gap: 12px;
+                font-size: 10px;
+                padding: 0 14px;
+            }
+        }
+
+        /* ── Responsive: Large screens (1600px+) ── */
+        @media (min-width: 1600px) {
+            .slide-inner {
+                max-width: 1440px;
+                margin: 0 auto;
+                padding: 36px 60px 50px;
+            }
+
+            .slide-title-area h1 {
+                font-size: 32px;
+            }
+
+            .kpi-value {
+                font-size: 34px;
+            }
+
+            .card {
+                padding: 28px;
+            }
+
+            .compare-col li,
+            .data-tag,
+            .hitl-step,
+            .value-item {
+                font-size: 14px;
+            }
+
+            .flow-step-icon {
+                width: 48px; height: 48px;
+                font-size: 22px;
+            }
+
+            .flow-step-label {
+                font-size: 12px;
+                max-width: 100px;
+            }
+        }
+
+        /* ── Responsive: Ultra-wide (2000px+) ── */
+        @media (min-width: 2000px) {
+            .slide-inner {
+                max-width: 1680px;
+                padding: 40px 80px 60px;
+            }
+
+            .slide-title-area h1 {
+                font-size: 36px;
+            }
+
+            .slide-title-area .subtitle {
+                font-size: 16px;
+            }
+
+            .kpi-value {
+                font-size: 38px;
+            }
+
+            .kpi-label {
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 32px;
+                border-radius: 20px;
+            }
+
+            .content-grid {
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+    <div class="logo-area">
+        <div class="logo-icon">EB</div>
+        <div class="logo-text"><span>KI Schnittstelle</span> &lt;&gt; Bank und Kunden</div>
+    </div>
+    <div class="slide-indicator">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+    </div>
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">◀</button>
+        <button class="nav-btn" onclick="nextSlide()">▶</button>
+        <button class="pdf-btn" id="pdfBtn" onclick="downloadAllSlides()">
+            <span class="pdf-icon">📥</span>
+            <span class="pdf-label">PDF</span>
+        </button>
+    </div>
+    <div class="pdf-progress" id="pdfProgress"><div class="pdf-progress-bar" id="pdfBar"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 1: Rechnungs-zu-Zahlung Pipeline        -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide-container">
+<div class="slide s1 active" id="slide-0">
+    <div class="slide-inner">
+
+        <div class="slide-header">
+            <div class="slide-number">01</div>
+            <div class="slide-title-area">
+                <h1>Automatische Rechnungs-zu-Zahlung Pipeline</h1>
+                <div class="subtitle">End-to-End-Automatisierung von Rechnungseingang bis Überweisung</div>
+                <div class="effect-badge">⚡ Spart 60-80 % manuelle Arbeit bei Rechnungen</div>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+            <div class="kpi">
+                <div class="kpi-value">60-80%</div>
+                <div class="kpi-label">Weniger manuelle Arbeit</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">&lt; 30s</div>
+                <div class="kpi-label">Rechnungsverarbeitung</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">99.2%</div>
+                <div class="kpi-label">OCR-Erkennungsrate</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">24/7</div>
+                <div class="kpi-label">Automatischer Betrieb</div>
+            </div>
+        </div>
+
+        <!-- Flow -->
+        <div class="card full-width" style="margin-bottom: 20px;">
+            <div class="card-label">
+                <span class="icon" style="background:rgba(0,160,227,0.15);">⛓</span>
+                Automatisierte Pipeline
+            </div>
+            <div class="flow-pipeline">
+                <div class="flow-step">
+                    <div class="flow-step-icon data-step">📄</div>
+                    <div class="flow-step-label">Rechnung (PDF/Scan)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">🔍</div>
+                    <div class="flow-step-label">OCR-Extraktion</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">✅</div>
+                    <div class="flow-step-label">KI-Validierung</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon human-step">👤</div>
+                    <div class="flow-step-label">Freigabe (ab Limit)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">💳</div>
+                    <div class="flow-step-label">SEPA-Zahlung via API</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon data-step">📊</div>
+                    <div class="flow-step-label">Buchung & Archiv</div>
+                </div>
+            </div>
+            <div class="api-strip">
+                <span>Technologie:</span>
+                <code>ErsteConnect API</code>
+                <code>PSD2 Open Banking</code>
+                <code>SEPA Payment Initiation</code>
+            </div>
+        </div>
+
+        <div class="content-grid">
+
+            <!-- Vergleich -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(231,76,60,0.15);">⚖</span>
+                    Heute vs. Automatisiert
+                </div>
+                <div class="comparison">
+                    <div class="compare-col today">
+                        <h4>⏱ Heute</h4>
+                        <ul>
+                            <li>Rechnungen manuell öffnen & prüfen</li>
+                            <li>Daten per Hand in Buchhaltung eintippen</li>
+                            <li>Freigabe per E-Mail / Unterschrift</li>
+                            <li>Überweisung manuell im Banking-Portal</li>
+                            <li>Fehleranfällig & langsam (Tage)</li>
+                        </ul>
+                    </div>
+                    <div class="compare-arrow">→</div>
+                    <div class="compare-col auto">
+                        <h4>🤖 Automatisiert</h4>
+                        <ul>
+                            <li>OCR liest Rechnungsdaten in Sekunden</li>
+                            <li>KI validiert gegen Lieferantenstamm</li>
+                            <li>Regelbasierte Auto-Freigabe</li>
+                            <li>Zahlung via ErsteConnect API</li>
+                            <li>Fehlerfrei & in Minuten erledigt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daten -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(0,160,227,0.15);">🗂</span>
+                    Verwendete Daten
+                </div>
+                <div class="data-tags">
+                    <div class="data-tag">
+                        <span class="tag-icon">📄</span>
+                        Rechnungen (PDF / Scan / E-Mail)
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">🏢</span>
+                        Lieferantenstammdaten
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">🏦</span>
+                        Bankkonten & IBAN
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">📋</span>
+                        Bestellungen & Verträge
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">📊</span>
+                        Historische Buchungsdaten
+                    </div>
+                </div>
+
+                <!-- HITL -->
+                <div style="margin-top: 24px;">
+                    <div class="card-label">
+                        <span class="icon" style="background:rgba(212,168,67,0.15);">👤</span>
+                        Human in the Loop
+                    </div>
+                    <div class="hitl-timeline">
+                        <div class="hitl-step ai">
+                            <span class="hitl-badge">KI</span>
+                            <span>OCR-Extraktion & Datenvalidierung</span>
+                        </div>
+                        <div class="hitl-step human">
+                            <span class="hitl-badge">Mensch</span>
+                            <span>Freigabe bei Betrag &gt; Schwellwert oder unbekanntem Lieferant</span>
+                        </div>
+                        <div class="hitl-step ai">
+                            <span class="hitl-badge">KI</span>
+                            <span>Zahlungsausführung & Buchung</span>
+                        </div>
+                        <div class="hitl-step human">
+                            <span class="hitl-badge">Mensch</span>
+                            <span>Stichproben-Audit & Eskalation bei Anomalien</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mehrwert -->
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(46,204,113,0.15);">💎</span>
+                    Mehrwert im Vergleich zu Heute
+                </div>
+                <div class="value-grid">
+                    <div class="value-card bank">
+                        <h5>🏦 Mehrwert Bank</h5>
+                        <div class="value-item">
+                            <span class="value-icon">📈</span>
+                            <span><strong>Höhere Kundenbindung</strong> - Kunden nutzen Erste als zentrale Finanzplattform, nicht nur als Konto</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">💰</span>
+                            <span><strong>Neue Gebührenmodelle</strong> - Transaktionsbasierte Einnahmen pro automatisierter Zahlung</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🔒</span>
+                            <span><strong>Weniger Betrug</strong> - KI erkennt Duplikate & verdächtige Rechnungen automatisch</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🏆</span>
+                            <span><strong>Wettbewerbsvorteil</strong> - Differenzierung als digitale Business-Bank</span>
+                        </div>
+                    </div>
+                    <div class="value-card kunde">
+                        <h5>🏢 Mehrwert Kundenunternehmen</h5>
+                        <div class="value-item">
+                            <span class="value-icon">⏱</span>
+                            <span><strong>60-80 % Zeitersparnis</strong> - Buchhaltungsteam für strategische Aufgaben frei</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🎯</span>
+                            <span><strong>Fehlerreduktion &gt; 95 %</strong> - Keine Tippfehler, keine vergessenen Rechnungen</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">⚡</span>
+                            <span><strong>Schnellere Zahlungszyklen</strong> - Skonto-Nutzung steigt, Lieferantenbeziehung verbessert</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">📱</span>
+                            <span><strong>Echtzeit-Transparenz</strong> - Status jeder Rechnung jederzeit einsehbar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 2: Cashflow-Frühwarnsystem               -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide s2" id="slide-1">
+    <div class="slide-inner">
+
+        <div class="slide-header">
+            <div class="slide-number">02</div>
+            <div class="slide-title-area">
+                <h1>Cashflow-Frühwarnsystem</h1>
+                <div class="subtitle">KI-gestützte Liquiditätsprognose & automatische Warnungen</div>
+                <div class="effect-badge">🛡 Vermeidet Notkredite & manuelle Excel-Forecasts</div>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+            <div class="kpi">
+                <div class="kpi-value">14 Tage</div>
+                <div class="kpi-label">Prognose-Horizont</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">92%</div>
+                <div class="kpi-label">Prognose-Genauigkeit</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">-70%</div>
+                <div class="kpi-label">Weniger Notkredite</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">0 min</div>
+                <div class="kpi-label">Manueller Forecast-Aufwand</div>
+            </div>
+        </div>
+
+        <!-- Flow -->
+        <div class="card full-width" style="margin-bottom: 20px;">
+            <div class="card-label">
+                <span class="icon" style="background:rgba(243,156,18,0.15);">🔄</span>
+                Automatisierter Prozess
+            </div>
+            <div class="flow-pipeline">
+                <div class="flow-step">
+                    <div class="flow-step-icon data-step">🏦</div>
+                    <div class="flow-step-label">Kontodaten via API</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">📊</div>
+                    <div class="flow-step-label">Muster-Analyse</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">🔮</div>
+                    <div class="flow-step-label">KI-Prognose</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">⚠️</div>
+                    <div class="flow-step-label">Frühwarnung</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon human-step">👤</div>
+                    <div class="flow-step-label">CFO-Entscheidung</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">💡</div>
+                    <div class="flow-step-label">Maßnahmen-Vorschlag</div>
+                </div>
+            </div>
+            <div class="api-strip">
+                <span>Technologie:</span>
+                <code>ErsteConnect API</code>
+                <code>Account Information (PSD2)</code>
+                <code>ML Time-Series Forecasting</code>
+            </div>
+        </div>
+
+        <div class="content-grid">
+
+            <!-- Vergleich -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(231,76,60,0.15);">⚖</span>
+                    Heute vs. Automatisiert
+                </div>
+                <div class="comparison">
+                    <div class="compare-col today">
+                        <h4>⏱ Heute</h4>
+                        <ul>
+                            <li>Manuelle Excel-Forecasts (wöchentlich)</li>
+                            <li>Liquiditätsengpass oft erst zu spät erkannt</li>
+                            <li>Notkredite zu schlechten Konditionen</li>
+                            <li>CFO verbringt Stunden mit Datensammlung</li>
+                            <li>Keine Echtzeitdaten verfügbar</li>
+                        </ul>
+                    </div>
+                    <div class="compare-arrow">→</div>
+                    <div class="compare-col auto">
+                        <h4>🤖 Automatisiert</h4>
+                        <ul>
+                            <li>Tägliche KI-Prognose in Echtzeit</li>
+                            <li>Warnung 14 Tage vor Engpass</li>
+                            <li>Proaktive Finanzierungsvorschläge</li>
+                            <li>Dashboard statt Excel-Sheets</li>
+                            <li>Saisonale Muster automatisch erkannt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daten + HITL -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(0,160,227,0.15);">🗂</span>
+                    Verwendete Daten
+                </div>
+                <div class="data-tags">
+                    <div class="data-tag">
+                        <span class="tag-icon">💳</span>
+                        Kontobewegungen (Ein-/Ausgänge)
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">🔁</span>
+                        Wiederkehrende Zahlungen
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">📅</span>
+                        Fällige Rechnungen & Gehälter
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">📈</span>
+                        Historische Cashflow-Daten
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">🏷</span>
+                        Branchenspezifische Saisondaten
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <div class="card-label">
+                        <span class="icon" style="background:rgba(212,168,67,0.15);">👤</span>
+                        Human in the Loop
+                    </div>
+                    <div class="hitl-timeline">
+                        <div class="hitl-step ai">
+                            <span class="hitl-badge">KI</span>
+                            <span>Kontinuierliche Cashflow-Analyse & Prognose</span>
+                        </div>
+                        <div class="hitl-step ai">
+                            <span class="hitl-badge">KI</span>
+                            <span>Automatische Warnung bei drohender Unterdeckung</span>
+                        </div>
+                        <div class="hitl-step human">
+                            <span class="hitl-badge">Mensch</span>
+                            <span>CFO bewertet Warnung & entscheidet über Maßnahme</span>
+                        </div>
+                        <div class="hitl-step human">
+                            <span class="hitl-badge">Mensch</span>
+                            <span>Berater kontaktiert Kunden proaktiv mit Lösungsangebot</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mehrwert -->
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(46,204,113,0.15);">💎</span>
+                    Mehrwert im Vergleich zu Heute
+                </div>
+                <div class="value-grid">
+                    <div class="value-card bank">
+                        <h5>🏦 Mehrwert Bank</h5>
+                        <div class="value-item">
+                            <span class="value-icon">🤝</span>
+                            <span><strong>Proaktive Beratung</strong> - Bank wird vom Kontoführer zum strategischen Finanzpartner</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">📊</span>
+                            <span><strong>Besseres Risikomanagement</strong> - Frühzeitige Erkennung von Kundenrisiken</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">💶</span>
+                            <span><strong>Cross-Selling</strong> - Gezielte Kreditlinien & Treasury-Produkte anbieten</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">📉</span>
+                            <span><strong>Kreditausfälle reduzieren</strong> - Probleme frühzeitig adressieren</span>
+                        </div>
+                    </div>
+                    <div class="value-card kunde">
+                        <h5>🏢 Mehrwert Kundenunternehmen</h5>
+                        <div class="value-item">
+                            <span class="value-icon">🛡</span>
+                            <span><strong>Keine Überraschungen</strong> - Liquiditätsengpässe werden Wochen vorher erkannt</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">💰</span>
+                            <span><strong>Bessere Konditionen</strong> - Geplante Finanzierung statt teure Notkredite</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">⏱</span>
+                            <span><strong>Stunden pro Woche gespart</strong> - Kein manuelles Erstellen von Cashflow-Reports</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🎯</span>
+                            <span><strong>Strategische Planung</strong> - Datengestützte Investitionsentscheidungen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 3: Kredit-Vorprüfung                     -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide s3" id="slide-2">
+    <div class="slide-inner">
+
+        <div class="slide-header">
+            <div class="slide-number">03</div>
+            <div class="slide-title-area">
+                <h1>KI-gestützte Kredit-Vorprüfung</h1>
+                <div class="subtitle">Automatische Transaktionsanalyse & Risikobewertung für schnellere Kreditentscheidungen</div>
+                <div class="effect-badge">🚀 Schnellere Kreditentscheidungen - von Tagen auf Minuten</div>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+            <div class="kpi">
+                <div class="kpi-value">5 min</div>
+                <div class="kpi-label">Vorprüfung statt 3 Tage</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">-40%</div>
+                <div class="kpi-label">Weniger Kreditausfälle</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">3x</div>
+                <div class="kpi-label">Mehr Anträge pro Berater</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">360°</div>
+                <div class="kpi-label">Finanzielle Gesamtansicht</div>
+            </div>
+        </div>
+
+        <!-- Flow -->
+        <div class="card full-width" style="margin-bottom: 20px;">
+            <div class="card-label">
+                <span class="icon" style="background:rgba(46,204,113,0.15);">⛓</span>
+                Automatisierter Kreditprozess
+            </div>
+            <div class="flow-pipeline">
+                <div class="flow-step">
+                    <div class="flow-step-icon data-step">📝</div>
+                    <div class="flow-step-label">Kreditantrag</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">🏦</div>
+                    <div class="flow-step-label">Transaktions-Analyse</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">📊</div>
+                    <div class="flow-step-label">Cashflow-Scoring</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon ai-step">🎯</div>
+                    <div class="flow-step-label">Risiko-Score</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon human-step">👤</div>
+                    <div class="flow-step-label">Kreditberater</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-step-icon data-step">✅</div>
+                    <div class="flow-step-label">Kreditentscheidung</div>
+                </div>
+            </div>
+            <div class="api-strip">
+                <span>Technologie:</span>
+                <code>ErsteConnect API</code>
+                <code>PSD2 Account Information</code>
+                <code>ML Risk Scoring Model</code>
+            </div>
+        </div>
+
+        <div class="content-grid">
+
+            <!-- Vergleich -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(231,76,60,0.15);">⚖</span>
+                    Heute vs. Automatisiert
+                </div>
+                <div class="comparison">
+                    <div class="compare-col today">
+                        <h4>⏱ Heute</h4>
+                        <ul>
+                            <li>Kunde bringt Papier-Unterlagen mit</li>
+                            <li>Berater prüft Kontoauszüge manuell</li>
+                            <li>Bilanzen & Gewinn-/Verlust werden händisch bewertet</li>
+                            <li>Entscheidung dauert 3-5 Werktage</li>
+                            <li>Subjektive Risikobewertung</li>
+                        </ul>
+                    </div>
+                    <div class="compare-arrow">→</div>
+                    <div class="compare-col auto">
+                        <h4>🤖 Automatisiert</h4>
+                        <ul>
+                            <li>Digitaler Antrag, Daten via API</li>
+                            <li>KI analysiert 12+ Monate Transaktionen</li>
+                            <li>Automatisches Cashflow-basiertes Scoring</li>
+                            <li>Vorergebnis in unter 5 Minuten</li>
+                            <li>Objektiver, datengestützter Risiko-Score</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daten + HITL -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(0,160,227,0.15);">🗂</span>
+                    Verwendete Daten
+                </div>
+                <div class="data-tags">
+                    <div class="data-tag">
+                        <span class="tag-icon">💳</span>
+                        Transaktionshistorie (12+ Monate)
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">📈</span>
+                        Umsatzentwicklung & Trends
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">🔁</span>
+                        Regelmäßige Ein-/Ausgänge
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">⚠️</span>
+                        Rücklastschriften & Überziehungen
+                    </div>
+                    <div class="data-tag">
+                        <span class="tag-icon">🏢</span>
+                        Branchenbenchmarks & KSV-Daten
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <div class="card-label">
+                        <span class="icon" style="background:rgba(212,168,67,0.15);">👤</span>
+                        Human in the Loop
+                    </div>
+                    <div class="hitl-timeline">
+                        <div class="hitl-step ai">
+                            <span class="hitl-badge">KI</span>
+                            <span>Automatische Datensammlung & Transaktionsanalyse</span>
+                        </div>
+                        <div class="hitl-step ai">
+                            <span class="hitl-badge">KI</span>
+                            <span>Risiko-Score berechnen & Empfehlung aussprechen</span>
+                        </div>
+                        <div class="hitl-step human">
+                            <span class="hitl-badge">Mensch</span>
+                            <span>Kreditberater prüft KI-Empfehlung & führt Kundengespräch</span>
+                        </div>
+                        <div class="hitl-step human">
+                            <span class="hitl-badge">Mensch</span>
+                            <span>Finale Kreditentscheidung & Vertragsgestaltung</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mehrwert -->
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(46,204,113,0.15);">💎</span>
+                    Mehrwert im Vergleich zu Heute
+                </div>
+                <div class="value-grid">
+                    <div class="value-card bank">
+                        <h5>🏦 Mehrwert Bank</h5>
+                        <div class="value-item">
+                            <span class="value-icon">⚡</span>
+                            <span><strong>3x mehr Kapazität</strong> - Berater bearbeiten mehr Anträge in gleicher Zeit</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">📉</span>
+                            <span><strong>40 % weniger Kreditausfälle</strong> - Datengestützte Entscheidungen statt Bauchgefühl</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🏆</span>
+                            <span><strong>Wettbewerbsvorteil</strong> - Schnellste Kreditentscheidung am Markt</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">📋</span>
+                            <span><strong>Compliance & Audit</strong> - Lückenlose Dokumentation jeder Entscheidung</span>
+                        </div>
+                    </div>
+                    <div class="value-card kunde">
+                        <h5>🏢 Mehrwert Kundenunternehmen</h5>
+                        <div class="value-item">
+                            <span class="value-icon">⏱</span>
+                            <span><strong>Minuten statt Tage</strong> - Vorläufige Zusage noch am selben Tag</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">📄</span>
+                            <span><strong>Weniger Papierkram</strong> - Keine Ordner voller Kontoauszüge mehr nötig</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🎯</span>
+                            <span><strong>Faire Bewertung</strong> - Objektive Analyse statt subjektiver Einschätzung</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">💡</span>
+                            <span><strong>Bessere Konditionen</strong> - Gutes Scoring = günstigere Zinsen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div><!-- /slide-container -->
+
+<!-- ── Author Footer ── -->
+<div class="author-bar">
+    <span class="author-name">Milan Kajkut</span>
+    <span class="separator"></span>
+    <span>✉ <a href="mailto:team@sumifai.com">team@sumifai.com</a></span>
+    <span class="separator"></span>
+    <span>🌐 <a href="https://sumifai.com/labs" target="_blank">SUMIFAI</a></span>
+</div>
+
+<!-- ── Keyboard Hint ── -->
+<div class="keyboard-hint">
+    <span class="key">◀</span>
+    <span class="key">▶</span>
+    Mit den Pfeiltasten durch die Seiten navigieren
+</div>
+
+<script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const total = slides.length;
+
+    function goToSlide(idx) {
+        if (idx < 0 || idx >= total || idx === current) return;
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = idx;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        // Reset scroll
+        slides[current].scrollTop = 0;
+    }
+
+    function nextSlide() { goToSlide(current + 1); }
+    function prevSlide() { goToSlide(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+    });
+
+    // Touch support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 60) {
+            if (diff > 0) nextSlide();
+            else prevSlide();
+        }
+    });
+
+    // ── PDF Download ──
+    async function downloadAllSlides() {
+        const btn = document.getElementById('pdfBtn');
+        const bar = document.getElementById('pdfBar');
+        const label = btn.querySelector('.pdf-label');
+        
+        btn.classList.add('downloading');
+        label.textContent = '...';
+        bar.style.width = '5%';
+
+        const savedSlide = current;
+        const allSlides = document.querySelectorAll('.slide');
+        const topBar = document.querySelector('.top-bar');
+        const hint = document.querySelector('.keyboard-hint');
+        const progress = document.getElementById('pdfProgress');
+
+        // Hide UI chrome
+        topBar.style.display = 'none';
+        if (hint) hint.style.display = 'none';
+
+        // Custom landscape page: same width as A4 landscape, reduced height
+        const pageW = 297;
+        const pageH = 160;
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [pageH, pageW] });
+
+        const renderWidth = 1200;
+
+        for (let i = 0; i < allSlides.length; i++) {
+            const slide = allSlides[i];
+            bar.style.width = (5 + i * 25) + '%';
+
+            // Prepare slide for capture
+            slide.style.position = 'relative';
+            slide.style.opacity = '1';
+            slide.style.transform = 'none';
+            slide.style.pointerEvents = 'none';
+            slide.style.width = renderWidth + 'px';
+            slide.style.height = 'auto';
+            slide.style.overflow = 'visible';
+            slide.style.display = 'block';
+            slide.style.zIndex = '9999';
+            const inner = slide.querySelector('.slide-inner');
+            if (inner) {
+                inner.style.minHeight = 'auto';
+                // Remove top-bar gap, use tight padding for PDF
+                inner.style.padding = '20px 44px 20px';
+            }
+            // Remove header top margin (normally for top-bar clearance)
+            const header = slide.querySelector('.slide-header');
+            if (header) header.style.marginTop = '0';
+
+            const slideContainer = document.querySelector('.slide-container');
+            slideContainer.style.overflow = 'visible';
+            slideContainer.style.height = 'auto';
+            slideContainer.style.position = 'relative';
+            document.body.style.overflow = 'visible';
+            document.body.style.height = 'auto';
+
+            await new Promise(r => setTimeout(r, 400));
+
+            // Capture slide as canvas
+            const canvas = await html2canvas(slide, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#0a1628',
+                width: renderWidth,
+                windowWidth: renderWidth,
+                scrollX: 0,
+                scrollY: 0,
+                logging: false
+            });
+
+            // Reset slide styles
+            slide.style.position = '';
+            slide.style.opacity = '';
+            slide.style.transform = '';
+            slide.style.pointerEvents = '';
+            slide.style.width = '';
+            slide.style.height = '';
+            slide.style.overflow = '';
+            slide.style.display = '';
+            slide.style.zIndex = '';
+            if (inner) {
+                inner.style.minHeight = '';
+                inner.style.padding = '';
+            }
+            if (header) header.style.marginTop = '';
+
+            bar.style.width = (30 + i * 25) + '%';
+
+            const canvasW = canvas.width;
+            const canvasH = canvas.height;
+
+            // Split canvas into exactly 2 equal halves
+            const halfH = Math.ceil(canvasH / 2);
+
+            for (let p = 0; p < 2; p++) {
+                if (i > 0 || p > 0) pdf.addPage([pageH, pageW], 'landscape');
+
+                const cropY = p * halfH;
+                const cropH = Math.min(halfH, canvasH - cropY);
+
+                const partCanvas = document.createElement('canvas');
+                partCanvas.width = canvasW;
+                partCanvas.height = cropH;
+                const ctx = partCanvas.getContext('2d');
+
+                ctx.fillStyle = '#0a1628';
+                ctx.fillRect(0, 0, canvasW, cropH);
+                ctx.drawImage(canvas, 0, cropY, canvasW, cropH, 0, 0, canvasW, cropH);
+
+                const partData = partCanvas.toDataURL('image/jpeg', 0.93);
+
+                // Always fill full page width, stretch height proportionally
+                const scaledH = (cropH / canvasW) * pageW;
+
+                // Always place at top-left, full width — dark bg fills any remaining space
+                pdf.setFillColor(10, 22, 40);
+                pdf.rect(0, 0, pageW, pageH, 'F');
+                pdf.addImage(partData, 'JPEG', 0, 0, pageW, Math.min(scaledH, pageH));
+            }
+        }
+
+        bar.style.width = '90%';
+
+        // Restore everything
+        document.body.style.overflow = '';
+        document.body.style.height = '';
+        const slideContainer = document.querySelector('.slide-container');
+        slideContainer.style.overflow = '';
+        slideContainer.style.height = '';
+        slideContainer.style.position = '';
+
+        topBar.style.display = '';
+        if (hint) hint.style.display = '';
+
+        goToSlide(savedSlide);
+
+        pdf.save('KI-Automatisierung-Bank.pdf');
+        bar.style.width = '100%';
+
+        setTimeout(() => {
+            bar.style.width = '0%';
+            btn.classList.remove('downloading');
+            label.textContent = 'PDF';
+        }, 800);
+    }
+</script>
+</body>
+</html>

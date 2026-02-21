@@ -49,6 +49,8 @@
             transition: opacity 0.6s ease, transform 0.6s ease;
             pointer-events: none;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
             scrollbar-width: thin;
             scrollbar-color: rgba(0,160,227,0.3) transparent;
         }
@@ -775,6 +777,22 @@
         @media (max-width: 600px) {
             body {
                 overflow-x: hidden;
+                overflow-y: hidden;
+                position: fixed;
+                width: 100%;
+            }
+
+            .slide-container {
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                overflow: hidden;
+            }
+
+            .slide {
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
             }
 
             .top-bar {

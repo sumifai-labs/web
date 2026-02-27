@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zusammenarbeit | Marktchance Serbien &amp; Bosnien</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Zusammenarbeit | Marktchance Serbien & Bosnien Herzegowina">
+    <meta property="og:description" content="Strategische Markterschließung für Zusammenarbeit in Serbien und Bosnien Herzegowina. Präsentiert von Milan Kajkut.">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Zusammenarbeit">
+
+    <!-- General SEO -->
+    <meta name="description" content="Zusammenarbeit | Strategische Markterschließung für Zusammenarbeit in Serbien und Bosnien Herzegowina. Präsentiert von Milan Kajkut.">
+    <meta name="author" content="Milan Kajkut">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --hk-dark: #faf6f2;
+            --hk-deep: #f5ede6;
+            --hk-red: #B71C1C;
+            --hk-red-light: #D32F2F;
+            --hk-orange: #E8712B;
+            --hk-amber: #D4943C;
+            --hk-gold: #C8860A;
+            --hk-brown: #6D4C2A;
+            --hk-charcoal: #2A1F1A;
+            --hk-wood: #8B5E3C;
+            --hk-ember: #E85D26;
+            --hk-warm-gray: #5C4A3A;
+            --glass-bg: rgba(255,255,255,0.55);
+            --glass-border: rgba(120,70,30,0.16);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { overflow: hidden; width: 100%; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--hk-dark);
+            color: var(--hk-charcoal);
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
+            position: fixed;
+            top: 0; left: 0;
+        }
+
+        /* Warm textured background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(183,28,28,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(232,113,43,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(212,148,60,0.04) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Slide Container */
+        .slide-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            pointer-events: none;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(183,28,28,0.25) transparent;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide::-webkit-scrollbar { width: 6px; }
+        .slide::-webkit-scrollbar-track { background: transparent; }
+        .slide::-webkit-scrollbar-thumb { background: rgba(183,28,28,0.25); border-radius: 3px; }
+
+        .slide::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .s1::before, .s2::before, .s3::before, .s4::before, .s5::before {
+            background: none;
+        }
+
+        .slide-inner {
+            position: relative;
+            z-index: 1;
+            padding: 30px 50px 150px;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(183,28,28,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #B71C1C, #D32F2F);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--hk-charcoal);
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span { color: var(--hk-red); }
+
+        .slide-indicator {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(183,28,28,0.18);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--hk-red);
+            box-shadow: 0 0 12px rgba(183,28,28,0.35);
+            width: 26px;
+            border-radius: 5px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pdf-btn {
+            height: 36px;
+            padding: 0 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--hk-orange);
+            background: rgba(232,113,43,0.10);
+            color: var(--hk-orange);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pdf-btn:hover {
+            background: rgba(232,113,43,0.25);
+            border-color: var(--hk-red);
+            color: var(--hk-red);
+            box-shadow: 0 0 14px rgba(232,113,43,0.25);
+            transform: scale(1.04);
+        }
+
+        .pdf-btn:active { transform: scale(0.96); }
+        .pdf-btn.downloading { pointer-events: none; opacity: 0.6; }
+        .pdf-btn .pdf-icon { font-size: 15px; line-height: 1; }
+
+        .pdf-progress {
+            position: fixed;
+            top: 56px; left: 0; right: 0;
+            height: 3px;
+            background: transparent;
+            z-index: 200;
+            overflow: hidden;
+        }
+
+        .pdf-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--hk-red), var(--hk-orange));
+            border-radius: 0 2px 2px 0;
+            transition: width 0.4s ease;
+        }
+
+        .nav-btn {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            border: 1.5px solid var(--hk-red);
+            background: rgba(183,28,28,0.08);
+            color: var(--hk-charcoal);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            font-size: 16px;
+            box-shadow: 0 0 8px rgba(183,28,28,0.10);
+            animation: pulseNav 2.5s ease-in-out infinite;
+        }
+
+        .nav-btn:hover {
+            background: rgba(183,28,28,0.18);
+            border-color: var(--hk-red);
+            box-shadow: 0 0 16px rgba(183,28,28,0.25);
+            transform: scale(1.1);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+            background: rgba(183,28,28,0.30);
+        }
+
+        @keyframes pulseNav {
+            0%, 100% { box-shadow: 0 0 8px rgba(183,28,28,0.10); }
+            50% { box-shadow: 0 0 18px rgba(183,28,28,0.22); }
+        }
+
+        /* Slide Header */
+        .slide-header {
+            margin-top: 46px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 22px;
+        }
+
+        .slide-number {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .slide-number::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 19px;
+            background: inherit;
+            opacity: 0.2;
+            z-index: -1;
+            filter: blur(8px);
+        }
+
+        .s1 .slide-number { background: linear-gradient(135deg, #B71C1C, #D32F2F); }
+        .s2 .slide-number { background: linear-gradient(135deg, #E8712B, #D45A1A); }
+        .s3 .slide-number { background: linear-gradient(135deg, #8B5E3C, #6D4C2A); }
+        .s4 .slide-number { background: linear-gradient(135deg, #D4943C, #B87A24); }
+        .s5 .slide-number { background: linear-gradient(135deg, #B71C1C, #8B2020); }
+
+        .slide-title-area h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--hk-charcoal);
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .slide-title-area .subtitle {
+            font-size: 14px;
+            color: rgba(42,31,26,0.55);
+            font-weight: 400;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        /* Cards */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+
+        .card:hover { border-color: rgba(183,28,28,0.22); }
+
+        .card-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 18px;
+            color: rgba(42,31,26,0.5);
+        }
+
+        .card-label .icon {
+            width: 22px; height: 22px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .card p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(42,31,26,0.72);
+            margin-bottom: 10px;
+        }
+
+        .card p:last-child { margin-bottom: 0; }
+
+        /* Stat Boxes */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .stat-box {
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .stat-box:hover { border-color: rgba(183,28,28,0.22); }
+
+        .stat-box .stat-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--hk-red);
+            margin-bottom: 4px;
+        }
+
+        .stat-box .stat-label {
+            font-size: 12px;
+            color: rgba(42,31,26,0.55);
+            line-height: 1.4;
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(42,31,26,0.78);
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(183,28,28,0.04);
+            border-left: 3px solid var(--hk-red);
+        }
+
+        .feature-list li .f-icon {
+            flex-shrink: 0;
+            width: 26px; height: 26px;
+            border-radius: 7px;
+            background: rgba(183,28,28,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            margin-top: 1px;
+        }
+
+        /* Channel List */
+        .channel-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .channel-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(42,31,26,0.78);
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(232,113,43,0.05);
+            border-left: 3px solid var(--hk-orange);
+        }
+
+        .channel-list li .ch-icon {
+            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        /* Sub-points within list items */
+        .sub-point {
+            display: block;
+            font-size: 12px;
+            color: rgba(42,31,26,0.55);
+            margin-top: 4px;
+            padding-left: 4px;
+        }
+
+        /* Skill Tags */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            background: rgba(139,94,60,0.06);
+            border: 1px solid rgba(139,94,60,0.16);
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(42,31,26,0.78);
+            flex: 1 1 220px;
+        }
+
+        .skill-tag .tag-icon {
+            width: 30px; height: 30px;
+            border-radius: 8px;
+            background: rgba(139,94,60,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        /* Journey Steps (Timeline) */
+        .journey-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 14px 0;
+            position: relative;
+        }
+
+        .journey-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 50px;
+            bottom: -2px;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(183,28,28,0.25), rgba(183,28,28,0.05));
+        }
+
+        .journey-step-num {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .journey-step:nth-child(1) .journey-step-num { background: linear-gradient(135deg, #B71C1C, #8B1515); }
+        .journey-step:nth-child(2) .journey-step-num { background: linear-gradient(135deg, #E8712B, #C45D1E); }
+        .journey-step:nth-child(3) .journey-step-num { background: linear-gradient(135deg, #D4943C, #B87A24); }
+        .journey-step:nth-child(4) .journey-step-num { background: linear-gradient(135deg, #8B5E3C, #6D4C2A); }
+
+        .journey-step-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--hk-charcoal);
+            margin-bottom: 4px;
+        }
+
+        .journey-step-content p {
+            font-size: 13px;
+            color: rgba(42,31,26,0.6);
+            line-height: 1.5;
+        }
+
+        .journey-step-content .step-detail {
+            font-size: 12px;
+            color: rgba(42,31,26,0.48);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* Statement Callout */
+        .statement-callout {
+            margin-top: 20px;
+            padding: 18px 24px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(183,28,28,0.06), rgba(232,113,43,0.04));
+            border: 1px solid rgba(183,28,28,0.18);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--hk-red);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Closing Statement */
+        .closing-statement {
+            margin-top: 24px;
+            padding: 22px 28px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(183,28,28,0.06), rgba(232,113,43,0.04));
+            border: 1px solid rgba(183,28,28,0.18);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--hk-charcoal);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Note Box */
+        .note-box {
+            margin-top: 16px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            background: rgba(232,113,43,0.06);
+            border: 1px solid rgba(232,113,43,0.18);
+            font-size: 12px;
+            color: rgba(42,31,26,0.65);
+            line-height: 1.6;
+        }
+
+        .note-box strong {
+            color: var(--hk-orange);
+        }
+
+        /* Hero Section (Slide 1) */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: calc(100vh - 120px);
+            padding: 60px 20px;
+            gap: 24px;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(135deg, #B71C1C, #D32F2F, #E8712B);
+            box-shadow: 0 8px 40px rgba(183,28,28,0.25);
+            animation: floatLogo 4s ease-in-out infinite;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-logo::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 60%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-30%) translateY(-30%); }
+            50% { transform: translateX(30%) translateY(30%); }
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-section h1 {
+            font-size: 44px;
+            font-weight: 900;
+            color: var(--hk-charcoal);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-section h1 .highlight {
+            background: linear-gradient(135deg, #B71C1C, #E8712B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: rgba(42,31,26,0.65);
+            font-weight: 400;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .hero-small {
+            font-size: 13px;
+            color: rgba(42,31,26,0.4);
+            font-style: italic;
+            max-width: 500px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 24px;
+            background: rgba(183,28,28,0.08);
+            border: 1px solid rgba(183,28,28,0.20);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--hk-red);
+            margin-top: 8px;
+        }
+
+        /* Diaspora highlight boxes */
+        .diaspora-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .diaspora-card {
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--glass-border);
+            transition: border-color 0.3s;
+        }
+
+        .diaspora-card:hover { border-color: rgba(183,28,28,0.22); }
+
+        .diaspora-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--hk-charcoal);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .diaspora-card p {
+            font-size: 12px;
+            color: rgba(42,31,26,0.6);
+            line-height: 1.5;
+        }
+
+        .diaspora-card.bih { border-top: 3px solid var(--hk-red); }
+        .diaspora-card.srb { border-top: 3px solid var(--hk-orange); }
+
+        /* Market data highlight */
+        .market-highlight {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: rgba(183,28,28,0.04);
+            border: 1px solid rgba(183,28,28,0.12);
+            font-size: 13px;
+            color: rgba(42,31,26,0.72);
+            margin-bottom: 8px;
+        }
+
+        .market-highlight:last-child { margin-bottom: 0; }
+
+        .market-highlight .mh-icon {
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+
+        /* Keyboard Hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: rgba(42,31,26,0.3);
+            z-index: 100;
+        }
+
+        .key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 22px;
+            border-radius: 4px;
+            border: 1px solid rgba(42,31,26,0.15);
+            background: rgba(255,255,255,0.4);
+            font-size: 10px;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            position: fixed;
+            bottom: 36px;
+            left: 0; right: 0;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(120,70,30,0.08);
+            padding: 10px 30px;
+            font-size: 9px;
+            line-height: 1.5;
+            color: rgba(42,31,26,0.35);
+            text-align: center;
+            z-index: 99;
+            max-height: 60px;
+            overflow-y: auto;
+        }
+
+        .disclaimer strong {
+            color: rgba(42,31,26,0.5);
+            font-weight: 600;
+        }
+
+        /* Author Footer */
+        .author-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 36px;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(120,70,30,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding: 0 30px;
+            z-index: 100;
+            font-size: 11px;
+            color: rgba(42,31,26,0.5);
+        }
+
+        .author-bar a {
+            color: var(--hk-red);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .author-bar a:hover { color: var(--hk-charcoal); }
+
+        .author-bar .separator {
+            width: 1px;
+            height: 14px;
+            background: rgba(42,31,26,0.12);
+        }
+
+        .author-bar .author-name {
+            font-weight: 600;
+            color: rgba(42,31,26,0.7);
+        }
+
+        .share-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .share-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(42,31,26,0.3);
+            margin-right: 2px;
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(42,31,26,0.06);
+            border: 1px solid rgba(42,31,26,0.1);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .share-btn:hover {
+            background: rgba(42,31,26,0.12);
+            border-color: rgba(42,31,26,0.2);
+            transform: translateY(-1px);
+        }
+
+        .share-btn svg {
+            width: 14px; height: 14px;
+            fill: rgba(42,31,26,0.45);
+            transition: fill 0.2s;
+        }
+
+        .share-btn:hover svg { fill: var(--hk-charcoal); }
+        .share-btn.linkedin:hover { background: rgba(0,119,181,0.12); border-color: rgba(0,119,181,0.3); }
+        .share-btn.linkedin:hover svg { fill: #0077b5; }
+        .share-btn.email-share:hover { background: rgba(183,28,28,0.10); border-color: rgba(183,28,28,0.25); }
+        .share-btn.email-share:hover svg { fill: var(--hk-red); }
+        .share-btn.phone-share:hover { background: rgba(90,158,111,0.12); border-color: rgba(90,158,111,0.3); }
+        .share-btn.phone-share:hover svg { fill: #2e7d32; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active .card { animation: fadeInUp 0.5s ease forwards; }
+        .slide.active .card:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .card:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .card:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Responsive: Tablet */
+        @media (max-width: 1100px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .slide-inner { padding: 30px 24px 130px; }
+            .diaspora-grid { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr 1fr; }
+            .hero-section h1 { font-size: 34px; }
+        }
+
+        /* Responsive: Mobile */
+        @media (max-width: 600px) {
+            body { overflow: hidden; height: 100vh; height: 100dvh; }
+
+            .top-bar {
+                height: 48px;
+                padding: 0 10px;
+                gap: 4px;
+            }
+
+            .logo-area { gap: 8px; }
+
+            .logo-area .logo-icon {
+                width: 26px; height: 26px;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+
+            .logo-text {
+                font-size: 11px;
+                max-width: 80px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .slide-indicator { gap: 5px; }
+            .dot { width: 8px; height: 8px; }
+            .dot.active { width: 20px; }
+
+            .nav-controls { gap: 4px; }
+            .nav-btn { width: 30px; height: 30px; font-size: 12px; border-radius: 6px; }
+            .pdf-btn { height: 30px; padding: 0 10px; font-size: 10px; gap: 4px; border-radius: 6px; }
+            .pdf-btn .pdf-icon { font-size: 13px; }
+
+            .slide-inner { padding: 16px 14px 130px; }
+
+            .slide-header {
+                margin-top: 40px;
+                margin-bottom: 18px;
+                gap: 14px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .slide-number { width: 42px; height: 42px; font-size: 18px; border-radius: 12px; }
+            .slide-title-area h1 { font-size: 19px; }
+            .slide-title-area .subtitle { font-size: 12px; }
+
+            .hero-section { padding: 40px 10px; gap: 16px; }
+            .hero-section h1 { font-size: 26px; }
+            .hero-subtitle { font-size: 15px; }
+            .hero-logo { width: 80px; height: 80px; border-radius: 18px; font-size: 20px; }
+
+            .content-grid { grid-template-columns: 1fr; gap: 14px; }
+            .card { padding: 16px; border-radius: 12px; }
+
+            .stat-grid { grid-template-columns: 1fr; gap: 10px; }
+            .diaspora-grid { grid-template-columns: 1fr; gap: 10px; }
+            .skill-tags { flex-direction: column; }
+
+            .journey-step { gap: 12px; padding: 10px 0; }
+            .journey-step-num { width: 32px; height: 32px; font-size: 12px; }
+            .journey-step-content h4 { font-size: 13px; }
+            .journey-step-content p { font-size: 12px; }
+            .journey-step:not(:last-child)::after { left: 15px; top: 44px; }
+
+            .keyboard-hint { font-size: 9px; bottom: 92px; gap: 5px; }
+            .keyboard-hint .key { width: 20px; height: 18px; font-size: 8px; }
+
+            .disclaimer { bottom: 32px; padding: 8px 14px; font-size: 8px; max-height: 52px; }
+
+            .author-bar { height: 32px; gap: 8px; font-size: 10px; padding: 0 10px; }
+            .author-bar .separator { display: none; }
+            .share-links { gap: 4px !important; margin-left: auto; }
+            .share-label { display: none !important; }
+            .share-btn { width: 22px !important; height: 22px !important; }
+        }
+
+        /* Large screens */
+        @media (min-width: 1600px) {
+            .slide-inner { max-width: 1440px; margin: 0 auto; padding: 36px 60px 150px; }
+            .slide-title-area h1 { font-size: 32px; }
+            .card { padding: 28px; }
+            .hero-section h1 { font-size: 52px; }
+        }
+
+        @media (min-width: 2000px) {
+            .slide-inner { max-width: 1680px; padding: 40px 80px 160px; }
+            .slide-title-area h1 { font-size: 36px; }
+            .card { padding: 32px; border-radius: 20px; }
+            .hero-section h1 { font-size: 58px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="logo-area">
+        <div class="logo-icon">🔥</div>
+        <div class="logo-text"><span>Zusammenarbeit</span></div>
+    </div>
+    <div class="slide-indicator">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
+        <div class="dot" onclick="goToSlide(3)"></div>
+        <div class="dot" onclick="goToSlide(4)"></div>
+    </div>
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">◀</button>
+        <button class="nav-btn" onclick="nextSlide()">▶</button>
+        <button class="pdf-btn" id="pdfBtn" onclick="downloadAllSlides()">
+            <span class="pdf-icon">📥</span>
+            <span class="pdf-label">PDF</span>
+        </button>
+    </div>
+</div>
+
+<!-- PDF Progress -->
+<div class="pdf-progress">
+    <div class="pdf-progress-bar" id="pdfBar"></div>
+</div>
+
+<!-- ════════════ SLIDE CONTAINER ════════════ -->
+<div class="slide-container">
+
+<!-- ─── SLIDE 1: MARKTCHANCE ─── -->
+<div class="slide s1 active">
+    <div class="slide-inner">
+        <div class="hero-section">
+            <div class="hero-logo">HARK</div>
+            <h1>Marktchance <span class="highlight">Serbien &amp; Bosnien</span></h1>
+            <p class="hero-subtitle">Strategische Markterschließung für Premium Kaminöfen in Südosteuropa</p>
+            <p class="hero-small">Ein Markt mit über 10 Millionen Einwohnern, in dem 50 bis 70 % der Haushalte mit Holz heizen.</p>
+            <div class="hero-badge">
+                🔥 Kein deutscher Premium Kaminofen Hersteller im Wettbewerb
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── SLIDE 2: HEIZMARKT SR & BH ─── -->
+<div class="slide s2">
+    <div class="slide-inner">
+        <div class="slide-header">
+            <div class="slide-number">2</div>
+            <div class="slide-title-area">
+                <h1>Heizmarkt Serbien &amp; Bosnien Herzegowina</h1>
+                <div class="subtitle">Holzfeuerung dominiert, der Markt wächst und die Handelsbarrieren sind minimal</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Holzfeuerung Statistik -->
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(183,28,28,0.12);">🪵</span>
+                    Holzfeuerung in der Region
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">71,6 %</div>
+                        <div class="stat-label">der Haushalte in BiH heizen mit Brennholz</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">700.000+</div>
+                        <div class="stat-label">Haushalte in BiH mit Holzfeuerung</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">69,7 %</div>
+                        <div class="stat-label">der Haushalte ohne Zentralheizung in Serbien heizen mit Holz</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">2.000.000+</div>
+                        <div class="stat-label">Haushalte in Serbien mit Holzfeuerung</div>
+                    </div>
+                </div>
+                <div class="note-box" style="margin-top: 14px;">
+                    <strong>📌 Ausgaben:</strong> Allein in BiH geben Haushalte jährlich rund 240 Millionen Euro für Holzbrennstoffe aus.
+                </div>
+            </div>
+
+            <!-- Bau & Investition -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(232,113,43,0.12);">🏗️</span>
+                    Bau &amp; Investition
+                </div>
+                <div class="market-highlight">
+                    <span class="mh-icon">🇷🇸</span>
+                    <span>Serbien: 35.380 neue Wohnungen in 2024 fertiggestellt (42 % über Vor Pandemie Niveau)</span>
+                </div>
+                <div class="market-highlight">
+                    <span class="mh-icon">🇧🇦</span>
+                    <span>BiH: steigende Immobilienpreise (+16,6 % im Jahresvergleich) und wachsende Wohnbaukredite (+14,1 % in 2024)</span>
+                </div>
+            </div>
+
+            <!-- Diaspora -->
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(212,148,60,0.12);">🌍</span>
+                    Diaspora Kaufkraft
+                </div>
+                <p>Über <strong style="color: var(--hk-red);">800.000 Auslandsserben und Bosnier</strong> in Deutschland investieren jährlich Milliarden in Immobilien in der Heimat.</p>
+                <div class="diaspora-grid">
+                    <div class="diaspora-card bih">
+                        <h4>🇧🇦 Bosnien Herzegowina</h4>
+                        <p>Rücküberweisungen von fast 2 Milliarden Dollar jährlich (14 bis 15 % des BIP)</p>
+                    </div>
+                    <div class="diaspora-card srb">
+                        <h4>🇷🇸 Serbien</h4>
+                        <p>Rekord Rücküberweisungen von 5,77 Milliarden Dollar in 2023 (7,1 % des BIP). In manchen Regionen machen Diaspora Käufer bis zu 40 % der Immobilienverkäufe aus.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zollvorteile & EcoPlus -->
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(139,94,60,0.12);">📋</span>
+                    Handelsvorteile &amp; Umwelt
+                </div>
+                <div class="market-highlight">
+                    <span class="mh-icon">🇪🇺</span>
+                    <span>Stabilisierungs und Assoziierungsabkommen mit der EU: <strong>0 % Zoll</strong> auf Industriegüter aus der EU. Lokal fallen nur MwSt. an (17 % in BiH, 20 % in Serbien).</span>
+                </div>
+                <div class="market-highlight">
+                    <span class="mh-icon">🌿</span>
+                    <span>Mit <strong>EcoPlus und modernen Katalysatoren</strong> (90 % Feinstaubreduktion) Lobbying auf Regierungs und EU Ebene für Haushaltssubventionen (z. B. GEFF Green Economy Financing Facility).</span>
+                </div>
+                <div class="market-highlight">
+                    <span class="mh-icon">🏆</span>
+                    <span><strong>Marktführerschaft</strong> mit Mittelklasse Modellen, ergänzt durch Premium Modelle für Luxusprojekte.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── SLIDE 3: WAS WIR MITBRINGEN ─── -->
+<div class="slide s3">
+    <div class="slide-inner">
+        <div class="slide-header">
+            <div class="slide-number">3</div>
+            <div class="slide-title-area">
+                <h1>Was wir mitbringen</h1>
+                <div class="subtitle">Die ideale Brücke zwischen Deutschland und dem Balkan</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(139,94,60,0.12);">💼</span>
+                    Unsere Kernkompetenzen
+                </div>
+                <div class="skill-tags">
+                    <div class="skill-tag">
+                        <div class="tag-icon">🇩🇪</div>
+                        <span>Fließend Deutsch, perfekte Kombination für die deutsch balkanische Zusammenarbeit</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="tag-icon">📦</div>
+                        <span>Erfahrung in Supply Chain und Beschaffung (Procurement)</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="tag-icon">📈</div>
+                        <span>Expertise in Business Development und Geschäftsaufbau</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="tag-icon">📍</div>
+                        <span>Lokale Präsenz und starkes Netzwerk in Serbien, Bosnien und Kroatien</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="tag-icon">🏛️</div>
+                        <span>Politische Kontakte für größere Zukunftsprojekte</span>
+                    </div>
+                    <div class="skill-tag">
+                        <div class="tag-icon">💻</div>
+                        <span>IT Kompetenz: Webshop Aufbau, Online Marketing und Social Media</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <div class="closing-statement">
+                    🤝 Die perfekte Kombination aus Sprachkompetenz, lokaler Marktkenntnis und technischem Know how für eine erfolgreiche Markterschließung.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── SLIDE 4: GO-TO-MARKET KANÄLE ─── -->
+<div class="slide s4">
+    <div class="slide-inner">
+        <div class="slide-header">
+            <div class="slide-number">4</div>
+            <div class="slide-title-area">
+                <h1>Go to Market Strategie</h1>
+                <div class="subtitle">Mehrere Vertriebskanäle für maximale Marktdurchdringung</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(183,28,28,0.12);">🎯</span>
+                    Vertriebskanäle
+                </div>
+                <ul class="channel-list">
+                    <li>
+                        <span class="ch-icon">🏠</span>
+                        <span>
+                            <strong>Diaspora Direktvertrieb</strong> und Vorbestellungen über das Baunetzwerk
+                        </span>
+                    </li>
+                    <li>
+                        <span class="ch-icon">📱</span>
+                        <span>
+                            <strong>Facebook und Instagram</strong> Werbung, gezielt auf die Balkan Diaspora in Deutschland, Österreich und der Schweiz
+                        </span>
+                    </li>
+                    <li>
+                        <span class="ch-icon">🏪</span>
+                        <span>
+                            <strong>Showroom in Showroom Konzept</strong> bei 4 bis 6 Partner Einzelhandelsstandorten in Belgrad, Novi Sad, Sarajevo und Banja Luka
+                        </span>
+                    </li>
+                    <li>
+                        <span class="ch-icon">📐</span>
+                        <span>
+                            <strong>Partnerschaften mit Architekten</strong> und Innendesignern für Spezifikationen und Empfehlungen
+                        </span>
+                    </li>
+                    <li>
+                        <span class="ch-icon">🏔️</span>
+                        <span>
+                            <strong>Gastronomie und Hotellerie</strong> Projekte, Hotels und Restaurants in Skigebieten
+                            <span class="sub-point">Die Entwicklung von Bergresorts boomt in der Region.</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="ch-icon">🏗️</span>
+                        <span>
+                            <strong>SEEBBE Baumesse Belgrad</strong>, die internationale Baufachmesse (50. Jubiläumsausgabe, April 2026)
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(232,113,43,0.12);">🚚</span>
+                    Logistik &amp; Reichweite
+                </div>
+                <p>Etablierte Frachtanbieter zwischen Deutschland und dem Balkan sichern eine zuverlässige Lieferkette.</p>
+
+                <div style="margin-top: 18px;">
+                    <div class="card-label">
+                        <span class="icon" style="background:rgba(212,148,60,0.12);">🗺️</span>
+                        Zielmärkte
+                    </div>
+                    <div class="diaspora-grid">
+                        <div class="diaspora-card srb">
+                            <h4>🇷🇸 Serbien</h4>
+                            <p>Belgrad, Novi Sad und weitere Großstädte. Größter Einzelmarkt in der Region.</p>
+                        </div>
+                        <div class="diaspora-card bih">
+                            <h4>🇧🇦 Bosnien Herzegowina</h4>
+                            <p>Sarajevo, Banja Luka und weitere Zentren. Hoher Anteil holzbeheizter Haushalte.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note-box" style="margin-top: 18px;">
+                    <strong>📌 Wichtig:</strong> Die Diaspora in der DACH Region ist der stärkste erste Vertriebskanal, da diese Zielgruppe bereits deutsche Qualität kennt und in Immobilien in der Heimat investiert.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ─── SLIDE 5: STUFENPLAN ─── -->
+<div class="slide s5">
+    <div class="slide-inner">
+        <div class="slide-header">
+            <div class="slide-number">5</div>
+            <div class="slide-title-area">
+                <h1>Stufenplan zur Markterschließung</h1>
+                <div class="subtitle">Vom ersten Kontakt zum nachhaltigen Marktauftritt</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card full-width">
+                <div class="card-label">
+                    <span class="icon" style="background:rgba(183,28,28,0.12);">🗓️</span>
+                    Umsetzungsschritte
+                </div>
+                <div class="journey-steps">
+                    <div class="journey-step">
+                        <div class="journey-step-num">1</div>
+                        <div class="journey-step-content">
+                            <h4>Phase 1: Aufbau (Monat 1 bis 3)</h4>
+                            <p>Lokalisierte Website und Social Media Präsenz aufbauen, basierend auf vorhandenem Hark Material. Showroom in Showroom Partnerschaften mit bestehenden Fachhändlern sichern.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step">
+                        <div class="journey-step-num">2</div>
+                        <div class="journey-step-content">
+                            <h4>Phase 2: Erstlieferung (Monat 4 bis 9)</h4>
+                            <p>Hark liefert eine erste Konsignationslieferung von 20+ Einheiten. Ware bleibt im Eigentum von Hark bis zum Verkauf. Bezahlung an Hark nach erfolgtem Verkauf.</p>
+                            <p class="step-detail">KPIs: Verkaufte Einheiten, Kundenzufriedenheit, Zahlungszuverlässigkeit und Marktfeedback.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step">
+                        <div class="journey-step-num">3</div>
+                        <div class="journey-step-content">
+                            <h4>Phase 3: Formalisierung (Monat 9 bis 12)</h4>
+                            <p>Bei Erreichen der KPIs aus Phase 2 erfolgt der Übergang zu einem formellen Alleinvertriebsvertrag für die Region.</p>
+                        </div>
+                    </div>
+                    <div class="journey-step">
+                        <div class="journey-step-num">4</div>
+                        <div class="journey-step-content">
+                            <h4>Phase 4: Expansion (Jahr 2+)</h4>
+                            <p>Ausbau von Partner Showrooms zu einem eigenen Hark Showroom in Belgrad (größter Markt) und Sarajevo. Aufbau eines zertifizierten Installateur Netzwerks.</p>
+                            <p class="step-detail">Erweiterung auf angrenzende Märkte: Montenegro und Nordmazedonien.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <div class="closing-statement">
+                    🔥 Von der marktgerechten Positionierung über den Erstverkauf bis hin zum langfristigen Alleinvertrieb: Ein klar strukturierter Fahrplan für nachhaltiges Wachstum.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /slide-container -->
+
+<!-- Author Footer -->
+<div class="author-bar">
+    <span class="author-name"><a href="https://www.linkedin.com/in/milan-kajkut" target="_blank" rel="noopener noreferrer">Milan Kajkut</a></span>
+    <span class="separator"></span>
+    <span>✉ <a href="mailto:milan.kajkut4@gmail.com">milan.kajkut4@gmail.com</a></span>
+    <span class="separator"></span>
+    <span>📞 <a href="tel:+436603789058">+43 660 3789 058</a></span>
+    <span class="separator"></span>
+    <div class="share-links">
+        <span class="share-label">Teilen</span>
+        <!-- LinkedIn -->
+        <a class="share-btn linkedin" id="shareLinkedIn" target="_blank" rel="noopener noreferrer" title="Auf LinkedIn teilen">
+            <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <!-- Email -->
+        <a class="share-btn email-share" id="shareEmail" title="Per E Mail teilen">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </a>
+        <!-- Phone -->
+        <a class="share-btn phone-share" href="tel:+436603789058" title="Anrufen">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </a>
+    </div>
+</div>
+
+<!-- Keyboard Hint -->
+<div class="keyboard-hint">
+    <span class="key">◀</span>
+    <span class="key">▶</span>
+    Pfeiltasten zum Navigieren zwischen den Folien
+</div>
+
+<!-- Disclaimer -->
+<div class="disclaimer">
+    <strong>Hinweis:</strong> Diese Seite dient ausschließlich Präsentations und Informationszwecken. Sie stellt kein verbindliches Angebot oder eine Aufforderung dar. Es werden keine personenbezogenen Daten erhoben, gespeichert oder an Dritte weitergegeben. Alle Inhalte, Konzepte und Beispiele dienen der Veranschaulichung und garantieren keine tatsächlichen Ergebnisse.
+</div>
+
+<script>
+    // Share Links
+    (function() {
+        const pageUrl = window.location.href;
+        const pageTitle = 'Zusammenarbeit | Marktchance Serbien & Bosnien Herzegowina';
+        const enc = encodeURIComponent;
+
+        const shareLinkedIn = document.getElementById('shareLinkedIn');
+        if (shareLinkedIn) shareLinkedIn.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + enc(pageUrl);
+
+        const shareEmail = document.getElementById('shareEmail');
+        if (shareEmail) shareEmail.href = 'mailto:?subject=' + enc(pageTitle) + '&body=' + enc(pageTitle + '\n\n' + pageUrl);
+    })();
+
+    // Slide Navigation
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const total = slides.length;
+
+    function goToSlide(idx) {
+        if (idx < 0 || idx >= total || idx === current) return;
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = idx;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        slides[current].scrollTop = 0;
+    }
+
+    function nextSlide() { goToSlide(current + 1); }
+    function prevSlide() { goToSlide(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+    });
+
+    // Touch support
+    let touchStartX = 0;
+    let touchStartY = 0;
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+        const dx = touchStartX - e.changedTouches[0].clientX;
+        const dy = touchStartY - e.changedTouches[0].clientY;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 2) {
+            if (dx > 0) nextSlide();
+            else prevSlide();
+        }
+    }, { passive: true });
+
+    // PDF Download
+    async function downloadAllSlides() {
+        const btn = document.getElementById('pdfBtn');
+        const bar = document.getElementById('pdfBar');
+        const label = btn.querySelector('.pdf-label');
+
+        btn.classList.add('downloading');
+        label.textContent = '...';
+        bar.style.width = '5%';
+
+        const savedSlide = current;
+        const allSlides = document.querySelectorAll('.slide');
+        const topBar = document.querySelector('.top-bar');
+        const hint = document.querySelector('.keyboard-hint');
+
+        if (!window.jspdf || typeof html2canvas !== 'function') {
+            alert('PDF Bibliotheken werden noch geladen. Bitte warten Sie einen Moment.');
+            btn.classList.remove('downloading');
+            label.textContent = 'PDF';
+            bar.style.width = '0%';
+            return;
+        }
+
+        try {
+        topBar.style.display = 'none';
+        if (hint) hint.style.display = 'none';
+
+        const pageW = 297;
+        const pageH = 167;
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [pageH, pageW] });
+
+        const renderWidth = 1440;
+        const renderHeight = 810;
+        const totalSlides = allSlides.length;
+        const slideContainer = document.querySelector('.slide-container');
+
+        for (let i = 0; i < totalSlides; i++) {
+            const slide = allSlides[i];
+            bar.style.width = (5 + (i / totalSlides) * 80) + '%';
+
+            // First measure natural content height
+            slide.style.cssText = 'position:relative; opacity:1; transform:none; pointer-events:none; width:' + renderWidth + 'px; height:auto; overflow:visible; display:block; z-index:9999;';
+
+            const inner = slide.querySelector('.slide-inner');
+            if (inner) {
+                inner.style.cssText = 'min-height:0; height:auto; padding:24px 48px 24px; overflow:visible; box-sizing:border-box;';
+            }
+            const header = slide.querySelector('.slide-header');
+            if (header) header.style.marginTop = '0';
+
+            slideContainer.style.cssText = 'overflow:visible; height:auto; position:relative;';
+            document.body.style.cssText += '; overflow:visible !important; height:auto !important;';
+
+            await new Promise(r => setTimeout(r, 200));
+
+            // Use the larger of fixed height or actual content height
+            var actualHeight = Math.max(renderHeight, slide.scrollHeight);
+            // Now lock the slide to that height for capture
+            slide.style.height = actualHeight + 'px';
+            slide.style.overflow = 'hidden';
+            if (inner) {
+                inner.style.height = actualHeight + 'px';
+                inner.style.overflow = 'hidden';
+            }
+
+            await new Promise(r => setTimeout(r, 200));
+
+            const canvas = await html2canvas(slide, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: false,
+                removeContainer: true,
+                backgroundColor: '#faf6f2',
+                width: renderWidth,
+                height: actualHeight,
+                windowWidth: renderWidth,
+                windowHeight: actualHeight,
+                scrollX: 0,
+                scrollY: 0,
+                logging: false,
+                onclone: function(clonedDoc) {
+                    var clonedBody = clonedDoc.body;
+                    clonedBody.style.setProperty('position', 'relative', 'important');
+                    clonedBody.style.setProperty('height', 'auto', 'important');
+                    clonedBody.style.setProperty('overflow', 'visible', 'important');
+                    clonedBody.style.setProperty('background-image', 'none', 'important');
+                    var style = clonedDoc.createElement('style');
+                    style.textContent = 'body::before{display:none!important;content:none!important;background:none!important} .slide::before{display:none!important;content:none!important;background:none!important} *{background-image:none!important}';
+                    clonedDoc.head.appendChild(style);
+                    clonedDoc.querySelectorAll('img').forEach(function(img) {
+                        var src = img.getAttribute('src') || '';
+                        if (!src.startsWith('http://') && !src.startsWith('https://') && !src.startsWith('data:')) {
+                            img.removeAttribute('src');
+                            img.style.setProperty('visibility', 'hidden', 'important');
+                        }
+                    });
+                }
+            });
+
+            slide.style.cssText = '';
+            if (inner) inner.style.cssText = '';
+            if (header) header.style.marginTop = '';
+
+            bar.style.width = (5 + ((i + 0.7) / totalSlides) * 80) + '%';
+
+            if (i > 0) pdf.addPage([pageH, pageW], 'landscape');
+
+            pdf.setFillColor(250, 246, 242);
+            pdf.rect(0, 0, pageW, pageH, 'F');
+
+            var imgData = canvas.toDataURL('image/jpeg', 0.92);
+
+            // Scale image to fit PDF page proportionally
+            var imgAspect = renderWidth / actualHeight;
+            var pageAspect = pageW / pageH;
+            var imgW, imgH, imgX, imgY;
+
+            if (imgAspect >= pageAspect) {
+                // Wider than page: fit to width
+                imgW = pageW;
+                imgH = pageW / imgAspect;
+                imgX = 0;
+                imgY = (pageH - imgH) / 2;
+            } else {
+                // Taller than page: fit to height
+                imgH = pageH;
+                imgW = pageH * imgAspect;
+                imgX = (pageW - imgW) / 2;
+                imgY = 0;
+            }
+
+            pdf.addImage(imgData, 'JPEG', imgX, imgY, imgW, imgH);
+
+            // Contact info card
+            var rx = pageW - 5;
+            var ty = 3.5;
+            var lh = 3.8;
+            var bw = 58;
+            var bh = 19;
+            var bx = rx - bw;
+            var by = ty - 1.5;
+
+            pdf.setGState(new pdf.GState({ opacity: 0.9 }));
+            pdf.setFillColor(255, 255, 255);
+            pdf.roundedRect(bx, by, bw, bh, 1.5, 1.5, 'F');
+            pdf.setGState(new pdf.GState({ opacity: 1 }));
+
+            pdf.setFillColor(183, 28, 28);
+            pdf.rect(bx + 4, by, bw - 8, 0.4, 'F');
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(7);
+            pdf.setTextColor(42, 31, 26);
+            pdf.text('Milan Kajkut', bx + bw / 2, ty + 2.5, { align: 'center' });
+
+            pdf.setDrawColor(183, 28, 28);
+            pdf.setLineWidth(0.15);
+            pdf.line(bx + 4, ty + 4, bx + bw - 4, ty + 4);
+
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(5.5);
+            pdf.setTextColor(183, 28, 28);
+            pdf.text('milan.kajkut4@gmail.com', bx + bw / 2, ty + 2.5 + lh + 1.5, { align: 'center' });
+            pdf.link(bx, ty + lh + 1, bw, 3.5, { url: 'mailto:milan.kajkut4@gmail.com' });
+
+            pdf.setTextColor(183, 28, 28);
+            pdf.text('+43 660 3789 058', bx + bw / 2, ty + 2.5 + lh * 2 + 1.5, { align: 'center' });
+            pdf.link(bx, ty + lh * 2 + 1, bw, 3.5, { url: 'tel:+436603789058' });
+
+            pdf.setTextColor(183, 28, 28);
+            pdf.text('linkedin.com/in/milan-kajkut', bx + bw / 2, ty + 2.5 + lh * 3 + 1.5, { align: 'center' });
+            pdf.link(bx, ty + lh * 3 + 1, bw, 3.5, { url: 'https://www.linkedin.com/in/milan-kajkut' });
+        }
+
+        bar.style.width = '95%';
+        slideContainer.style.cssText = '';
+
+        pdf.save('Hark-Kamine-Marktchance-Serbien-Bosnien.pdf');
+        bar.style.width = '100%';
+
+        setTimeout(() => {
+            bar.style.width = '0%';
+            btn.classList.remove('downloading');
+            label.textContent = 'PDF';
+        }, 800);
+
+        } catch (err) {
+            console.error('PDF Erstellung fehlgeschlagen:', err);
+            alert('PDF Download fehlgeschlagen: ' + err.message);
+            bar.style.width = '0%';
+            btn.classList.remove('downloading');
+            label.textContent = 'PDF';
+        } finally {
+            document.body.style.overflow = '';
+            document.body.style.height = '';
+            const slideContainer2 = document.querySelector('.slide-container');
+            if (slideContainer2) {
+                slideContainer2.style.cssText = '';
+            }
+            topBar.style.display = '';
+            if (hint) hint.style.display = '';
+            goToSlide(savedSlide);
+        }
+    }
+</script>
+</body>
+</html>
